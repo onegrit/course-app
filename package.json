@@ -45,7 +45,13 @@
     ]
   },
   "devDependencies": {
-    "@capacitor/cli": "2.4.6"
+    "@capacitor/cli": "2.4.6",
+    "cz-conventional-changelog": "^3.3.0"
   },
-  "description": "An Ionic project"
+  "description": "An Ionic project",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }
