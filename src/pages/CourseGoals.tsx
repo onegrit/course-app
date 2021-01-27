@@ -1,5 +1,7 @@
 import React from "react";
 import {
+  IonBackButton,
+  IonButtons,
   IonContent,
   IonHeader,
   IonPage,
@@ -12,6 +14,9 @@ const CourseGoals: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
+          <IonButtons slot="start">
+            <IonBackButton defaultHref="/" />
+          </IonButtons>
           <IonTitle>Course Goals</IonTitle>
         </IonToolbar>
       </IonHeader>
