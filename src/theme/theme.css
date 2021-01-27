@@ -3,3 +3,6 @@
   --ion-tab-bar-background: var(--ion-color-secondary);
   --ion-tab-bar-color-selected: var(--ion-color-primary);
 }
+ion-back-button {
+  --color: var(--ion-color-primary-contrast);
+}
