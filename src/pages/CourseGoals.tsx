@@ -1,9 +1,15 @@
 import React from "react";
-import { IonContent, IonHeader, IonTitle, IonToolbar } from "@ionic/react";
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/react";
 
 const CourseGoals: React.FC = () => {
   return (
-    <React.Fragment>
+    <IonPage>
       <IonHeader>
         <IonToolbar>
           <IonTitle>Course Goals</IonTitle>
@@ -12,7 +18,7 @@ const CourseGoals: React.FC = () => {
       <IonContent>
         <p>goal list</p>
       </IonContent>
-    </React.Fragment>
+    </IonPage>
   );
 };
 

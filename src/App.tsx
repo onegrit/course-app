@@ -1,7 +1,7 @@
 import React from "react";
 import { Route } from "react-router-dom";
 import { IonReactRouter } from "@ionic/react-router";
-import { IonApp } from "@ionic/react";
+import { IonApp, IonRouterOutlet } from "@ionic/react";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -27,12 +27,14 @@ import CourseGoals from "./pages/CourseGoals";
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
-      <Route path="/" exact>
-        <Courses />
-      </Route>
-      <Route path="/course-goals">
-        <CourseGoals />
-      </Route>
+      <IonRouterOutlet>
+        <Route path="/" exact>
+          <Courses />
+        </Route>
+        <Route path="/course-goals">
+          <CourseGoals />
+        </Route>
+      </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
 );
