@@ -4,6 +4,8 @@ import {
   IonButton,
   IonButtons,
   IonContent,
+  IonFab,
+  IonFabButton,
   IonHeader,
   IonIcon,
   IonItem,
@@ -15,11 +17,12 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react";
 import { useParams } from "react-router-dom";
 
 import { COURSE_DATA } from "../data/course-data";
-import { create, trash } from "ionicons/icons";
+import { add, addOutline, create, trash } from "ionicons/icons";
 
 const CourseGoals: React.FC = () => {
   const selectedCourseId = useParams<{ courseId: string }>().courseId;
@@ -36,14 +39,27 @@ const CourseGoals: React.FC = () => {
     event.stopPropagation();
     console.log("Delted...");
   };
+  const addGoalHandler = () => {
+    console.log("add...");
+  };
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref="/" />
+            <IonBackButton defaultHref="/courses/list" />
           </IonButtons>
           <IonTitle>{course ? course.title : "Not course found"}</IonTitle>
+          {
+            // add on IOS
+            !isPlatform("android") && (
+              <IonButtons slot="end">
+                <IonButton onClick={addGoalHandler}>
+                  <IonIcon slot="icon-only" icon={addOutline} />
+                </IonButton>
+              </IonButtons>
+            )
+          }
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -68,6 +84,16 @@ const CourseGoals: React.FC = () => {
             ))}
           </IonList>
         )}
+        {
+          // Fab Button for Android
+          isPlatform("android") && (
+            <IonFab horizontal="end" vertical="bottom" slot="fixed">
+              <IonFabButton color="secondary" onClick={addGoalHandler}>
+                <IonIcon icon={addOutline} />
+              </IonFabButton>
+            </IonFab>
+          )
+        }
       </IonContent>
     </IonPage>
   );
