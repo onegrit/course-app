@@ -15,6 +15,7 @@ import {
   IonItemSliding,
   IonLabel,
   IonList,
+  IonModal,
   IonPage,
   IonTitle,
   IonToast,
@@ -25,21 +26,43 @@ import { useParams } from "react-router-dom";
 
 import { COURSE_DATA } from "../data/course-data";
 import { addOutline, create, trash } from "ionicons/icons";
+import EditGoalModal from "../components/EditGoalModal";
+import { stringify } from "querystring";
 
 const CourseGoals: React.FC = () => {
   const [startedDeleting, setStartedDeleting] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [selectedGoal, setSelectedGoal] = useState<any>(null);
 
   const selectedCourseId = useParams<{ courseId: string }>().courseId;
-  let course = null;
-  if (selectedCourseId) {
-    course = COURSE_DATA.find((course) => course.id === selectedCourseId);
-  }
+  const selectedCourse = COURSE_DATA.find((c) => c.id === selectedCourseId);
 
-  const editGoalHandler = (event: React.MouseEvent) => {
+  // Edit Logic
+  const editGoalHandler = (event: React.MouseEvent, goalId: string) => {
     event.stopPropagation();
-    console.log("Edit ...");
+    const goal = selectedCourse?.goals.find(
+      (g: { id: string; text: string }) => g.id === goalId
+    );
+    if (!goal) {
+      return;
+    }
+    setIsEditing(true);
+    setSelectedGoal(goal);
+    console.log(goal);
   };
+
+  const cancelEditGoalHandler = () => {
+    setIsEditing(false);
+    setSelectedGoal(null);
+    console.log("Cancel Edit Goal...");
+  };
+  const saveEditGoalHandler = () => {
+    setIsEditing(true);
+    console.log("Save edit goal handler...");
+  };
+
+  // Delete Logic
   const startDeleteGoalHandler = (event: React.MouseEvent) => {
     setStartedDeleting(true);
   };
@@ -47,11 +70,21 @@ const CourseGoals: React.FC = () => {
     setStartedDeleting(false);
     setToastMessage("Deleted Goal!");
   };
+
+  // Add logic
   const addGoalHandler = () => {
-    console.log("add...");
+    setIsEditing(true);
+    setSelectedGoal(null);
+    // console.log("add...");
   };
   return (
     <React.Fragment>
+      <EditGoalModal
+        show={isEditing}
+        onCancel={cancelEditGoalHandler}
+        // onEditing={saveEditGoalHandler}
+        editedGoal={selectedGoal}
+      />
       <IonToast
         isOpen={!!toastMessage}
         message={toastMessage}
@@ -84,7 +117,9 @@ const CourseGoals: React.FC = () => {
             <IonButtons slot="start">
               <IonBackButton defaultHref="/courses/list" />
             </IonButtons>
-            <IonTitle>{course ? course.title : "Not course found"}</IonTitle>
+            <IonTitle>
+              {selectedCourse ? selectedCourse.title : "Not course found"}
+            </IonTitle>
             {
               // add on IOS
               !isPlatform("android") && (
@@ -98,9 +133,9 @@ const CourseGoals: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          {course && (
+          {selectedCourse && (
             <IonList>
-              {course.goals.map((goal) => (
+              {selectedCourse.goals.map((goal) => (
                 <IonItemSliding key={goal.id}>
                   <IonItemOptions side="start">
                     <IonItemOption
@@ -114,7 +149,7 @@ const CourseGoals: React.FC = () => {
                     <IonLabel>{goal.text}</IonLabel>
                   </IonItem>
                   <IonItemOptions side="end">
-                    <IonItemOption onClick={editGoalHandler}>
+                    <IonItemOption onClick={(e) => editGoalHandler(e, goal.id)}>
                       <IonIcon icon={create} slot="icon-only" />
                     </IonItemOption>
                   </IonItemOptions>
