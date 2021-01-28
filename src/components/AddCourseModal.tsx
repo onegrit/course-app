@@ -1,39 +1,44 @@
 import {
-  IonModal,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
   IonButton,
-  IonGrid,
-  IonRow,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
   IonCol,
+  IonContent,
+  IonGrid,
+  IonHeader,
+  IonInput,
   IonItem,
   IonLabel,
-  IonInput,
+  IonModal,
+  IonRow,
+  IonTitle,
+  IonToolbar,
 } from "@ionic/react";
-import React, { useState } from "react";
+import React from "react";
 
-const EditGoalModal: React.FC<{
+const AddCourseModal: React.FC<{
   show: boolean;
   onCancel: () => void;
-  //   onEditing: () => void;
-  editedGoal: { id: string; text: string } | null;
+  onSave: () => void;
 }> = (props) => {
   return (
     <IonModal isOpen={props.show}>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>{props.editedGoal ? "Edit" : "Add"} Goal</IonTitle>
+          <IonTitle>Add Course</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
+        {/* Should be Course Form */}
         <IonGrid>
           <IonRow>
             <IonCol>
               <IonItem>
-                <IonLabel position="floating">Your Goal</IonLabel>
-                <IonInput type="text" value={props.editedGoal?.text} />
+                <IonLabel position="floating">Title</IonLabel>
+                <IonInput type="text" />
               </IonItem>
             </IonCol>
           </IonRow>
@@ -47,7 +52,7 @@ const EditGoalModal: React.FC<{
               <IonButton
                 color="secondary"
                 expand="block"
-                // onClick={props.onSaveEditingGoal}
+                onClick={props.onSave}
               >
                 Save
               </IonButton>
@@ -55,9 +60,8 @@ const EditGoalModal: React.FC<{
           </IonRow>
         </IonGrid>
       </IonContent>
-      <IonContent></IonContent>
     </IonModal>
   );
 };
 
-export default EditGoalModal;
+export default AddCourseModal;
