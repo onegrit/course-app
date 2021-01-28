@@ -7,6 +7,7 @@ import {
   IonCardTitle,
   IonCol,
   IonContent,
+  IonDatetime,
   IonGrid,
   IonHeader,
   IonInput,
@@ -39,6 +40,14 @@ const AddCourseModal: React.FC<{
               <IonItem>
                 <IonLabel position="floating">Title</IonLabel>
                 <IonInput type="text" />
+              </IonItem>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <IonItem>
+                <IonLabel>Enrolment Date</IonLabel>
+                <IonDatetime displayFormat="MM DD YY" />
               </IonItem>
             </IonCol>
           </IonRow>
