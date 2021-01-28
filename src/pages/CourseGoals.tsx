@@ -4,6 +4,9 @@ import {
   IonButtons,
   IonContent,
   IonHeader,
+  IonItem,
+  IonLabel,
+  IonList,
   IonPage,
   IonTitle,
   IonToolbar,
@@ -29,7 +32,15 @@ const CourseGoals: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <p>goal list</p>
+        {course && (
+          <IonList>
+            {course.goals.map((goal) => (
+              <IonItem key={goal.id} lines="full">
+                <IonLabel>{goal.text}</IonLabel>
+              </IonItem>
+            ))}
+          </IonList>
+        )}
       </IonContent>
     </IonPage>
   );
