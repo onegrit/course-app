@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   IonAlert,
   IonBackButton,
@@ -34,6 +34,7 @@ const CourseGoals: React.FC = () => {
   const [toastMessage, setToastMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<any>(null);
+  const slidingOptionsRef = useRef<HTMLIonItemSlidingElement>(null);
 
   const selectedCourseId = useParams<{ courseId: string }>().courseId;
   const selectedCourse = COURSE_DATA.find((c) => c.id === selectedCourseId);
@@ -44,6 +45,7 @@ const CourseGoals: React.FC = () => {
     const goal = selectedCourse?.goals.find(
       (g: { id: string; text: string }) => g.id === goalId
     );
+    slidingOptionsRef.current?.closeOpened();
     if (!goal) {
       return;
     }
@@ -136,7 +138,7 @@ const CourseGoals: React.FC = () => {
           {selectedCourse && (
             <IonList>
               {selectedCourse.goals.map((goal) => (
-                <IonItemSliding key={goal.id}>
+                <IonItemSliding key={goal.id} ref={slidingOptionsRef}>
                   <IonItemOptions side="start">
                     <IonItemOption
                       onClick={startDeleteGoalHandler}
