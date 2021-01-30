@@ -40,7 +40,7 @@ const Courses: React.FC = () => {
   const cancelAddCourseHandler = () => {
     setIsAdding(false);
   };
-  const saveCourseHandler = () => {
+  const saveCourseHandler = (title: string, date: Date) => {
     console.log("Saving Course...");
   };
 
