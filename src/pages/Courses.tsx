@@ -1,11 +1,6 @@
 import {
   IonButton,
   IonButtons,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
   IonCol,
   IonContent,
   IonFab,
@@ -20,15 +15,19 @@ import {
   isPlatform,
 } from "@ionic/react";
 import { addOutline } from "ionicons/icons";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 import AddCourseModal from "../components/AddCourseModal";
 import CourseItem from "../components/CourseItem";
 import { COURSE_DATA } from "../data/course-data";
+import CourseContext from "../data/courses-context";
 
 const Courses: React.FC = () => {
   const history = useHistory();
+  // isAdding == true,open Add Modal, otherwise close the Add Modal
   const [isAdding, setIsAdding] = useState(false);
+  const coursesCtx = useContext(CourseContext);
+
   const changePageHandler = () => {
     history.push("/course-goals");
   };
@@ -40,8 +39,9 @@ const Courses: React.FC = () => {
   const cancelAddCourseHandler = () => {
     setIsAdding(false);
   };
-  const saveCourseHandler = (title: string, date: Date) => {
-    console.log("Saving Course...");
+  const courseAddHandler = (title: string, date: Date) => {
+    coursesCtx.addCourse(title, date);
+    setIsAdding(false);
   };
 
   return (
@@ -49,7 +49,7 @@ const Courses: React.FC = () => {
       <AddCourseModal
         show={isAdding}
         onCancel={cancelAddCourseHandler}
-        onSave={saveCourseHandler}
+        onSave={courseAddHandler}
       />
       <IonPage>
         <IonHeader>
@@ -69,7 +69,7 @@ const Courses: React.FC = () => {
         </IonHeader>
         <IonContent>
           <IonGrid>
-            {COURSE_DATA.map((course) => (
+            {coursesCtx.courses.map((course) => (
               <IonRow key={course.id}>
                 <IonCol size-md="4" offset-md="4">
                   <CourseItem
