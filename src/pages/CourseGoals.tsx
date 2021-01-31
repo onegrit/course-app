@@ -15,6 +15,8 @@ import {
   IonToolbar,
   isPlatform,
   IonList,
+  IonItem,
+  IonText,
 } from "@ionic/react";
 import { useParams } from "react-router-dom";
 
@@ -39,6 +41,34 @@ const CourseGoals: React.FC = () => {
     (c) => c.id === selectedCourseId
   );
 
+  // Conditional rendering
+  let content = (
+    <IonItem>
+      <IonText>No goals found!</IonText>
+    </IonItem>
+  );
+  if (!selectedCourse) {
+    content = (
+      <IonItem>
+        <IonText>No Course found!</IonText>
+      </IonItem>
+    );
+  }
+  if (selectedCourse && selectedCourse.goals.length > 0) {
+    content = (
+      <IonList>
+        {selectedCourse.goals.map((goal) => (
+          <EditableGoalItem
+            key={goal.id}
+            goalText={goal.text}
+            slidingRef={slidingOptionsRef}
+            onStartDelete={() => startDeleteGoalHandler(goal.id)}
+            onStartEdit={(e) => editGoalHandler(e, goal.id)}
+          />
+        ))}
+      </IonList>
+    );
+  }
   // Edit Logic
   const editGoalHandler = (event: React.MouseEvent, goalId: string) => {
     event.stopPropagation();
@@ -148,19 +178,7 @@ const CourseGoals: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          {selectedCourse && (
-            <IonList>
-              {selectedCourse.goals.map((goal) => (
-                <EditableGoalItem
-                  key={goal.id}
-                  goalText={goal.text}
-                  slidingRef={slidingOptionsRef}
-                  onStartDelete={() => startDeleteGoalHandler(goal.id)}
-                  onStartEdit={(e) => editGoalHandler(e, goal.id)}
-                />
-              ))}
-            </IonList>
-          )}
+          {content}
           {
             // Fab Button for Android
             isPlatform("android") && (

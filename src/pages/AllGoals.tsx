@@ -8,6 +8,7 @@ import {
   IonList,
   IonMenuButton,
   IonPage,
+  IonText,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -44,16 +45,23 @@ const AllGoals: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <IonList>
-          {goals.map((goal) => (
-            <IonItem key={goal.id}>
-              <IonLabel>
-                <h2>{goal.text}</h2>
-                <p>{goal.courseTitle}</p>
-              </IonLabel>
-            </IonItem>
-          ))}
-        </IonList>
+        {goals.length === 0 && (
+          <IonItem>
+            <IonText>No goals found!</IonText>
+          </IonItem>
+        )}
+        {goals.length > 0 && (
+          <IonList>
+            {goals.map((goal) => (
+              <IonItem key={goal.id}>
+                <IonLabel>
+                  <h2>{goal.text}</h2>
+                  <p>{goal.courseTitle}</p>
+                </IonLabel>
+              </IonItem>
+            ))}
+          </IonList>
+        )}
       </IonContent>
     </IonPage>
   );

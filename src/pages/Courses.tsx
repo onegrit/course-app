@@ -8,8 +8,10 @@ import {
   IonGrid,
   IonHeader,
   IonIcon,
+  IonItem,
   IonPage,
   IonRow,
+  IonText,
   IonTitle,
   IonToolbar,
   isPlatform,
@@ -43,7 +45,29 @@ const Courses: React.FC = () => {
     coursesCtx.addCourse(title, date);
     setIsAdding(false);
   };
-
+  // Conditioanl rendering
+  let content = (
+    <IonItem className="ion-text-center">
+      <IonText>No Course Found. Pls click Add button to add course.</IonText>
+    </IonItem>
+  );
+  if (coursesCtx.courses.length > 0) {
+    content = (
+      <IonGrid>
+        {coursesCtx.courses.map((course) => (
+          <IonRow key={course.id}>
+            <IonCol size-md="4" offset-md="4">
+              <CourseItem
+                id={course.id}
+                title={course.title}
+                enrollmentDate={course.enrolled}
+              />
+            </IonCol>
+          </IonRow>
+        ))}
+      </IonGrid>
+    );
+  }
   return (
     <React.Fragment>
       <AddCourseModal
@@ -68,19 +92,7 @@ const Courses: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          <IonGrid>
-            {coursesCtx.courses.map((course) => (
-              <IonRow key={course.id}>
-                <IonCol size-md="4" offset-md="4">
-                  <CourseItem
-                    id={course.id}
-                    title={course.title}
-                    enrollmentDate={course.enrolled}
-                  />
-                </IonCol>
-              </IonRow>
-            ))}
-          </IonGrid>
+          {content}
           {isPlatform("android") && (
             <IonFab horizontal="end" vertical="bottom" slot="fixed">
               <IonFabButton color="secondary" onClick={startAddCourseHandler}>
