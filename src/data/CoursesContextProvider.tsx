@@ -21,8 +21,8 @@ const CoursesContextProvider: React.FC = (props) => {
       text,
     };
 
-    setCourses((courses) => {
-      const updatedCourses = [...courses];
+    setCourses((curCourses) => {
+      const updatedCourses = [...curCourses];
       const updatedCourseIdx = updatedCourses.findIndex(
         (c) => c.id === courseId
       );
@@ -36,8 +36,47 @@ const CoursesContextProvider: React.FC = (props) => {
       return updatedCourses;
     });
   };
-  const deleteGoal = () => {};
-  const updateGoal = () => {};
+
+  const deleteGoal = (courseId: string, goalId: string) => {
+    setCourses((curCourses) => {
+      const updatedCourses = [...curCourses];
+      const updatedCourseIdx = updatedCourses.findIndex(
+        (course) => course.id === courseId
+      );
+      const updatedCourseGoals = updatedCourses[updatedCourseIdx].goals.filter(
+        (goal) => goal.id !== goalId
+      );
+      const updatedCourse = { ...updatedCourses[updatedCourseIdx] };
+      updatedCourse.goals = updatedCourseGoals;
+      updatedCourses[updatedCourseIdx] = updatedCourse;
+
+      return updatedCourses;
+    });
+  };
+
+  const updateGoal = (courseId: string, goalId: string, newText: string) => {
+    setCourses((curCourses) => {
+      const updatedCourses = [...curCourses];
+      const updatedCourseIdx = updatedCourses.findIndex(
+        (course) => course.id === courseId
+      );
+      const updatedCourse = { ...updatedCourses[updatedCourseIdx] };
+
+      const updatedCourseGoals = updatedCourse.goals.slice();
+      const updatedCourseGoalIdx = updatedCourseGoals.findIndex(
+        (goal) => goal.id === goalId
+      );
+      const updatedCourseGoal = {
+        ...updatedCourseGoals[updatedCourseGoalIdx],
+        text: newText,
+      };
+      updatedCourseGoals[updatedCourseGoalIdx] = updatedCourseGoal;
+      updatedCourse.goals = updatedCourseGoals;
+      updatedCourses[updatedCourseIdx] = updatedCourse;
+
+      return updatedCourses;
+    });
+  };
   return (
     <CourseContext.Provider
       value={{

@@ -28,7 +28,9 @@ const CourseGoals: React.FC = () => {
   const [toastMessage, setToastMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<any>(null);
+
   const slidingOptionsRef = useRef<HTMLIonItemSlidingElement>(null);
+  const selectedGoalRef = useRef<string | null>(null);
 
   const courseCtx = useContext(CourseContext);
 
@@ -57,18 +59,30 @@ const CourseGoals: React.FC = () => {
     setSelectedGoal(null);
     console.log("Cancel Edit Goal...");
   };
-  const addGoalHandler = (goalTitle: string) => {
-    courseCtx.addGoal(selectedCourseId, goalTitle);
+
+  // Save Logic
+  const saveGoalHandler = (goalTitle: string) => {
+    if (selectedGoal) {
+      // Edting
+      console.log(selectedGoal);
+
+      courseCtx.updateGoal(selectedCourseId, selectedGoal.id, goalTitle);
+    } else {
+      // Adding
+      courseCtx.addGoal(selectedCourseId, goalTitle);
+    }
     setIsEditing(false); // Close the modal. 更进一步，提供保存和保存并退出两个button
-    // console.log("Save edit goal handler...");
   };
 
   // Delete Logic
-  const startDeleteGoalHandler = () => {
+  const startDeleteGoalHandler = (goalId: string) => {
     setStartedDeleting(true);
+    // 利用useRef保存将要删除的goal
+    selectedGoalRef.current = goalId;
   };
   const deleteGoalHandler = () => {
     setStartedDeleting(false);
+    courseCtx.deleteGoal(selectedCourseId, selectedGoalRef.current!);
     setToastMessage("Deleted Goal!");
   };
 
@@ -83,7 +97,7 @@ const CourseGoals: React.FC = () => {
       <EditGoalModal
         show={isEditing}
         onCancel={cancelEditGoalHandler}
-        onSave={addGoalHandler}
+        onSave={saveGoalHandler}
         editedGoal={selectedGoal}
       />
       <IonToast
@@ -141,7 +155,7 @@ const CourseGoals: React.FC = () => {
                   key={goal.id}
                   goalText={goal.text}
                   slidingRef={slidingOptionsRef}
-                  onStartDelete={startDeleteGoalHandler}
+                  onStartDelete={() => startDeleteGoalHandler(goal.id)}
                   onStartEdit={(e) => editGoalHandler(e, goal.id)}
                 />
               ))}

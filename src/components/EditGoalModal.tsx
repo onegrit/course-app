@@ -47,7 +47,11 @@ const EditGoalModal: React.FC<{
             <IonCol>
               <IonItem>
                 <IonLabel position="floating">Your Goal</IonLabel>
-                <IonInput type="text" ref={titleRef} />
+                <IonInput
+                  type="text"
+                  ref={titleRef}
+                  value={props.editedGoal?.text}
+                />
               </IonItem>
             </IonCol>
           </IonRow>
