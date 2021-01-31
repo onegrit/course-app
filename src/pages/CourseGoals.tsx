@@ -72,10 +72,13 @@ const CourseGoals: React.FC = () => {
       courseCtx.addGoal(selectedCourseId, goalTitle);
     }
     setIsEditing(false); // Close the modal. 更进一步，提供保存和保存并退出两个button
+    slidingOptionsRef.current?.closeOpened();
   };
 
   // Delete Logic
   const startDeleteGoalHandler = (goalId: string) => {
+    // Fix: 将原设置IonToast onDidMiss上的清空通知操作转移到这里，避免warning
+    setToastMessage("");
     setStartedDeleting(true);
     // 利用useRef保存将要删除的goal
     selectedGoalRef.current = goalId;
@@ -104,9 +107,6 @@ const CourseGoals: React.FC = () => {
         isOpen={!!toastMessage}
         message={toastMessage}
         duration={2000}
-        onDidDismiss={() => {
-          setToastMessage("");
-        }}
       />
       <IonAlert
         isOpen={startedDeleting}
