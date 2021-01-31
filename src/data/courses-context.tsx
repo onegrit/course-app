@@ -1,7 +1,7 @@
 import React from "react";
 import Courses from "../pages/Courses";
 
-interface Goal {
+export interface Goal {
   id: string;
   text: string;
 }
@@ -15,7 +15,7 @@ export interface Course {
 interface Context {
   courses: Course[];
   addCourse: (courseTitle: string, courseDate: Date) => void;
-  addGoal: () => void;
+  addGoal: (courseId: string, text: string) => void;
   deleteGoal: () => void;
   updateGoal: () => void;
 }

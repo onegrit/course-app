@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import {
   IonAlert,
   IonBackButton,
@@ -18,10 +18,10 @@ import {
 } from "@ionic/react";
 import { useParams } from "react-router-dom";
 
-import { COURSE_DATA } from "../data/course-data";
 import { addOutline } from "ionicons/icons";
 import EditGoalModal from "../components/EditGoalModal";
 import EditableGoalItem from "../components/EditableGoalItem";
+import CourseContext from "../data/courses-context";
 
 const CourseGoals: React.FC = () => {
   const [startedDeleting, setStartedDeleting] = useState(false);
@@ -30,8 +30,12 @@ const CourseGoals: React.FC = () => {
   const [selectedGoal, setSelectedGoal] = useState<any>(null);
   const slidingOptionsRef = useRef<HTMLIonItemSlidingElement>(null);
 
+  const courseCtx = useContext(CourseContext);
+
   const selectedCourseId = useParams<{ courseId: string }>().courseId;
-  const selectedCourse = COURSE_DATA.find((c) => c.id === selectedCourseId);
+  const selectedCourse = courseCtx.courses.find(
+    (c) => c.id === selectedCourseId
+  );
 
   // Edit Logic
   const editGoalHandler = (event: React.MouseEvent, goalId: string) => {
@@ -53,9 +57,10 @@ const CourseGoals: React.FC = () => {
     setSelectedGoal(null);
     console.log("Cancel Edit Goal...");
   };
-  const saveEditGoalHandler = () => {
-    setIsEditing(true);
-    console.log("Save edit goal handler...");
+  const addGoalHandler = (goalTitle: string) => {
+    courseCtx.addGoal(selectedCourseId, goalTitle);
+    setIsEditing(false); // Close the modal. 更进一步，提供保存和保存并退出两个button
+    // console.log("Save edit goal handler...");
   };
 
   // Delete Logic
@@ -68,7 +73,7 @@ const CourseGoals: React.FC = () => {
   };
 
   // Add logic
-  const addGoalHandler = () => {
+  const startAddGoalHandler = () => {
     setIsEditing(true);
     setSelectedGoal(null);
     // console.log("add...");
@@ -78,7 +83,7 @@ const CourseGoals: React.FC = () => {
       <EditGoalModal
         show={isEditing}
         onCancel={cancelEditGoalHandler}
-        // onEditing={saveEditGoalHandler}
+        onSave={addGoalHandler}
         editedGoal={selectedGoal}
       />
       <IonToast
@@ -120,7 +125,7 @@ const CourseGoals: React.FC = () => {
               // add on IOS
               !isPlatform("android") && (
                 <IonButtons slot="end">
-                  <IonButton onClick={addGoalHandler}>
+                  <IonButton onClick={startAddGoalHandler}>
                     <IonIcon slot="icon-only" icon={addOutline} />
                   </IonButton>
                 </IonButtons>
@@ -146,7 +151,7 @@ const CourseGoals: React.FC = () => {
             // Fab Button for Android
             isPlatform("android") && (
               <IonFab horizontal="end" vertical="bottom" slot="fixed">
-                <IonFabButton color="secondary" onClick={addGoalHandler}>
+                <IonFabButton color="secondary" onClick={startAddGoalHandler}>
                   <IonIcon icon={addOutline} />
                 </IonFabButton>
               </IonFab>
